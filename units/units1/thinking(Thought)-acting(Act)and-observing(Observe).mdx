@@ -1,0 +1,72 @@
+Agents work in a continuous cycle of: thinking (Thought) → acting (Act) and observing (Observe).
+
+
+
+
+Thought: The LLM part of the Agent decides what the next step should be.
+
+Action: The agent takes an action, by calling the tools with the associated arguments.
+
+Observation: The model reflects on the response from the tool.
+
+The Thought-Action-Observation Cycle ---
+
+The three components work together in a continuous loop. To use an analogy from programming, the agent uses a while loop: the loop continues until the objective of the agent has been fulfilled.
+
+In many Agent frameworks, the rules and guidelines are embedded directly into the system prompt, ensuring that every cycle adheres to a defined logic.
+
+In a simplified version, our system prompt.
+
+We see here that in the System Message we defined :
+
+The Agent’s behavior.
+The Tools our Agent has access to, as we described in the previous section.
+The Thought-Action-Observation Cycle, that we bake into the LLM instructions.
+
+ Thought : 
+
+ Upon receiving the query, Agent internal dialogue might be:
+
+“The user needs current weather information for New York. I have access to a tool that fetches weather data. First, I need to call the weather API to get up-to-date details.”
+
+This step shows the agent breaking the problem into steps: first, gathering the necessary data.
+
+ Action:
+
+ Tool Usage:
+
+ Based on its reasoning and the fact that agent knows about a get_weather tool, Agent prepares a JSON-formatted command that calls the weather API tool. For example, its first action could be:
+
+Thought: I need to check the current weather for New York.
+
+   {
+     "action": "get_weather",
+     "action_input": {
+       "location": "New York"
+     }
+   }
+
+
+  Observation:
+
+Feedback from the Environment:
+
+After the tool call, Agent receives an observation. This might be the raw weather data from the API such as: “Current weather in New York: partly cloudy, 15°C, 60% humidity.”
+
+This observation is then added to the prompt as additional context. It functions as real-world feedback, confirming whether the action succeeded and providing the needed details.
+
+Updated thought
+Reflecting:
+
+With the observation in hand, Agent updates its internal reasoning:
+“Now that I have the weather data for New York, I can compile an answer for the user.”
+
+
+ Final Action
+Agent then generates a final response formatted as we told it to:
+
+Thought: I have the weather data now. The current weather in New York is partly cloudy with a temperature of 15°C and 60% humidity.”
+
+Final answer : The current weather in New York is partly cloudy with a temperature of 15°C and 60% humidity.
+
+This final action sends the answer back to the user, closing the loop.
